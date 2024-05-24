@@ -1,0 +1,2 @@
+imports:
+  - { resource: "../src/Module/User/Infrastructure/DependencyInjection/_module.yaml" }

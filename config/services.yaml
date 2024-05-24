@@ -1,0 +1,16 @@
+imports:
+    - { resource: 'modules.yaml' }
+
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    BetaReaders\:
+        resource: '../src/'
+        exclude:
+            - '../src/Module/'
+            - '../src/Shared/'
+            - '../src/Kernel.php'

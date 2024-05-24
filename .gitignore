@@ -1,0 +1,41 @@
+###> general ###
+.idea
+docker-compose.yaml
+###< general ###
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> phpstan/phpstan ###
+phpstan.neon
+.phpstan
+###< phpstan/phpstan ###
+
+###> docker/garbage ###
+.bash_history
+.mysql_history
+.composer
+.gitconfig
+###< docker/garbage ###
+
+###> phpunit/phpunit ###
+phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+.php-cs-fixer.php
+###< friendsofphp/php-cs-fixer ###
+
+###> symfony/phpunit-bridge ###
+/phpunit.xml
+###< symfony/phpunit-bridge ###

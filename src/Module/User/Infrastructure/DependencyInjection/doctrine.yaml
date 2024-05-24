@@ -1,0 +1,10 @@
+doctrine:
+  orm:
+    entity_managers:
+      default:
+        mappings:
+          User:
+            type: xml
+            dir: '%kernel.project_dir%/src/Module/User/Infrastructure/Persistence/Doctrine'
+            prefix: BetaReaders\Module\User\Domain
+            is_bundle: false

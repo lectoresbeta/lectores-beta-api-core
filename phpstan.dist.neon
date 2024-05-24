@@ -1,0 +1,11 @@
+parameters:
+    tmpDir: .phpstan
+    level: 6
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/
+    excludePaths:
+       - .docker
+

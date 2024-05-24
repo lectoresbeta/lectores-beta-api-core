@@ -1,0 +1,46 @@
+networks:
+  default:
+    name: beta-readers-network
+
+services:
+  webserver:
+    container_name: 'beta-readers-api-webserver'
+    build:
+      context: .docker/webserver
+      args:
+        PHP_VERSION: 8.1
+        HOST_UID: ${CURRENT_UID:-1000}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - "9000:80"
+    links:
+      - mysql
+    environment:
+      - PHP_IDE_CONFIG=serverName=localhost
+      - PHP_VERSION=8.1
+    volumes:
+      - ./:/var/www/html
+      - ./.docker/config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./.docker/config/vhosts:/etc/apache2/sites-enabled
+      - ./var/log/docker/apache2:/var/log/apache2
+      - ./var/log/docker/xdebug:/var/log/xdebug
+  mysql:
+    container_name: 'beta-readers-mysql-8'
+    build:
+      context: .
+      dockerfile: .docker/mysql/Dockerfile
+      args:
+        BASE_DIRECTORY: .docker
+    ports:
+      - "3306:3306"
+    volumes:
+      - $PWD/.docker/mysql/template/config:/etc/mysql/conf.d
+    env_file:
+      - $PWD/.docker/mysql/template/env/common.env
+    tmpfs:
+      - /var/lib/mysql:rw,noexec,size=256M
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "--silent" ]
+      interval: 5s
+      retries: 3

@@ -1,0 +1,16 @@
+grumphp:
+  hooks_dir: ~
+  process_timeout: 240
+  ascii: ~
+  parallel:
+    enabled: true
+    max_workers: 8
+  git_hook_variables:
+    EXEC_GRUMPHP_COMMAND: 'docker exec --user=$(id -u):$(id -g) -it beta-readers-api-webserver php'
+  tasks:
+    phpcsfixer2:
+      config: ./.php-cs-fixer.php
+      verbose: true
+    phpstan:
+      configuration: ./phpstan.neon
+

@@ -1,0 +1,4 @@
+# v1.user.get:
+#   path: /v1/users/{userId}
+#   methods: [GET]
+#   defaults: { _controller: BetaReaders\Module\User\Infrastructure\UI\GetUserByIdController }

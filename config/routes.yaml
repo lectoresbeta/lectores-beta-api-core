@@ -1,0 +1,2 @@
+users_routing:
+    resource: '../src/Module/User/Infrastructure/DependencyInjection/routes.yaml'
