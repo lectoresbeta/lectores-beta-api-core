@@ -64,7 +64,7 @@ bash: ## Enter to the php-fpm container
 # 🧪 Testing
 #
 .PHONY: unit
-unit:
+unit: ## Run unitary tests suite
 	docker exec --user=$(CURRENT_UID) $(DOCKER_CONTAINER) ./vendor/bin/phpunit -c phpunit.xml
 
 #
