@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BetaReaders\Shared\Domain\Type;
+namespace BetaReaders\Shared\Domain\Value;
 
 abstract class FloatValue
 {

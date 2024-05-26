@@ -1,6 +1,9 @@
 parameters:
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
     tmpDir: .phpstan
-    level: 6
+    level: 8
     paths:
         - bin/
         - config/
@@ -8,4 +11,4 @@ parameters:
         - src/
     excludePaths:
        - .docker
-
+    inferPrivatePropertyTypeFromConstructor: true

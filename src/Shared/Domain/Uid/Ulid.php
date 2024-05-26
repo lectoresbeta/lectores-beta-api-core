@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BetaReaders\Shared\Domain\Uid;
 
-use BetaReaders\Shared\Domain\Type\StringValue;
+use BetaReaders\Shared\Domain\Value\StringValue;
 use Ulid\Exception\InvalidUlidStringException;
 use Ulid\Ulid as BaseUlid;
 
