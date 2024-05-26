@@ -55,6 +55,7 @@ utility and which kind of file or code it's expected on that place.
 ├── phpunit.xml.dist            # Executable version of PHPUnit config
 ├── src                         # Application source per module
 │   ├── Kernel.php              # Application shared kernel
+│   ├── Packages                # Boilerplate code from third party / libraries
 │   ├── Module                  # Layered application modules
 │   │   └── User
 │   │       ├── Domain

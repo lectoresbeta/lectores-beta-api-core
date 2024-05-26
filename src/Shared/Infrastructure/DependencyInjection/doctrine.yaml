@@ -1,0 +1,7 @@
+doctrine:
+  dbal:
+
+    # Register custom application DBAL types from Packages namespace,
+    # to avoid boilerplate code from libraries in our Shared layer.
+    types:
+      ulid_type: BetaReaders\Packages\Doctrine\DBAL\Type\UlidType

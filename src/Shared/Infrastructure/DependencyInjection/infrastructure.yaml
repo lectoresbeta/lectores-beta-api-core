@@ -1,0 +1,10 @@
+# Shared infrastructure components DI register
+services:
+
+  # UuidProvider
+  BetaReaders\Shared\Infrastructure\Uid\RandomUuidProvider: ~
+  BetaReaders\Shared\Domain\Uid\UuidProvider: '@BetaReaders\Shared\Infrastructure\Uid\RandomUuidProvider'
+
+  # UlidProvider
+  BetaReaders\Shared\Infrastructure\Uid\RandomUlidProvider: ~
+  BetaReaders\Shared\Domain\Uid\UlidProvider: '@BetaReaders\Shared\Infrastructure\Uid\RandomUlidProvider'

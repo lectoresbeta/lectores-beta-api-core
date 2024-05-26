@@ -4,7 +4,9 @@ DOCKER_COMPOSER = docker run --rm --interactive --tty --volume $$PWD:/app --user
 DOCKER_COMPOSE = docker compose -f docker-compose.yaml
 
 CURRENT_UID := $(shell id -u)
+CURRENT_GROUP := $(shell id -g)
 export CURRENT_UID
+export CURRENT_GROUP
 
 # Colors
 NC := '\033[0m'
@@ -58,27 +60,27 @@ package/add: ## Install new package through composer
 
 .PHONY: bash
 bash: ## Enter to the php-fpm container
-	docker exec --user=$(CURRENT_UID) -it $(DOCKER_CONTAINER) bash
+	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) -it $(DOCKER_CONTAINER) bash
 
 #
 # 🧪 Testing
 #
 .PHONY: unit
 unit: ## Run unitary tests suite
-	docker exec --user=$(CURRENT_UID) $(DOCKER_CONTAINER) ./vendor/bin/phpunit -c phpunit.xml
+	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/phpunit -c phpunit.xml
 
 #
 # 💅 Style
 #
 .PHONY: style/all
 style/all: ## Analyse code style and possible errors
-	docker exec --user=$(CURRENT_UID) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
-	docker exec --user=$(CURRENT_UID) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon
+	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
+	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon
 
 .PHONY: style/code-style
 style/code-style: ## Analyse code style
-	docker exec --user=$(CURRENT_UID) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
+	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
 
 .PHONY: style/fix
 style/fix: ## Fix code style
-	docker exec --user=$(CURRENT_UID) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php
+	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php
