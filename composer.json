@@ -43,7 +43,10 @@
     "autoload": {
         "psr-4": {
             "BetaReaders\\": ["src"]
-        }
+        },
+        "files": [
+            "src/Packages/Utils/*.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

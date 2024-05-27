@@ -13,4 +13,5 @@ services:
         exclude:
             - '../src/Module/'
             - '../src/Shared/'
+            - '../src/Packages/'
             - '../src/Kernel.php'

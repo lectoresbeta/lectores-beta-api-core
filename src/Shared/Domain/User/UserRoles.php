@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BetaReaders\Shared\Domain\User;
 
 use BetaReaders\Shared\Domain\Type\Collection\Collection;
+
 use function Lambdish\Phunctional\map;
 
 final class UserRoles extends Collection

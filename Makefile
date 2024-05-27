@@ -20,7 +20,7 @@ help: ## Show make targets
 
 setup: ## Copy app bootstrap necessary files and install deps
 	if [ ! -f "docker-compose.yaml" ]; then cp docker-compose.dist.yaml docker-compose.yaml; fi
-	if [ ! -f "phpunit.xml" ]; then cp phpunit.dist.xml phpunit.xml; fi
+	if [ ! -f "phpunit.xml" ]; then cp phpunit.xml.dist phpunit.xml; fi
 	if [ ! -f ".php-cs-fixer.php" ]; then cp .php-cs-fixer.dist.php .php-cs-fixer.php; fi
 	if [ ! -f ".env.local" ]; then cp .env .env.local; fi
 	if [ ! -d "vendor" ]; then make install; fi

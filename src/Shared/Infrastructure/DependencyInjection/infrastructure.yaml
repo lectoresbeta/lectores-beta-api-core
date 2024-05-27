@@ -1,6 +1,16 @@
 # Shared infrastructure components DI register
 services:
 
+  # AddJsonBodyToRequestListener
+  BetaReaders\Packages\Symfony\Listener\AddJsonBodyToRequestListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+  # ExceptionListener
+  BetaReaders\Packages\Symfony\Listener\ExceptionListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
   # UuidProvider
   BetaReaders\Shared\Infrastructure\Uid\RandomUuidProvider: ~
   BetaReaders\Shared\Domain\Uid\UuidProvider: '@BetaReaders\Shared\Infrastructure\Uid\RandomUuidProvider'
