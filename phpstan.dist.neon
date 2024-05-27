@@ -11,4 +11,5 @@ parameters:
         - src/
     excludePaths:
        - .docker
+       - migrations
     inferPrivatePropertyTypeFromConstructor: true

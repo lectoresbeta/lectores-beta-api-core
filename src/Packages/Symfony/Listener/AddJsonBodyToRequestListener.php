@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace BetaReaders\Packages\Symfony\Listener;
 
+use function BetaReaders\Utils\jsonDeserialize;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use function BetaReaders\Utils\jsonDeserialize;
 
 final class AddJsonBodyToRequestListener
 {

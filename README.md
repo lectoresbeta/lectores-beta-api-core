@@ -53,6 +53,7 @@ utility and which kind of file or code it's expected in that place.
 ├── .php-cs-fixer.php           # Executable version of phpcsfixer config
 ├── phpunit.xml                 # Distributable version of PHPUnit config
 ├── phpunit.xml.dist            # Executable version of PHPUnit config
+├── migrations                  # Database migrations folder grouped by year
 ├── src                         # Application source per module
 │   ├── Kernel.php              # Application shared kernel
 │   ├── Packages                # Boilerplate code from third party / libraries

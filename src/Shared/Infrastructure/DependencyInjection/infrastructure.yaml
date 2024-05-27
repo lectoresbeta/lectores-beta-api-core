@@ -1,5 +1,11 @@
 # Shared infrastructure components DI register
 services:
+  # Parent doctrine repository DI setup
+  BetaReaders\Shared\Infrastructure\Doctrine\Repository:
+    abstract: true
+    arguments:
+      $entityManager: '@doctrine.orm.entity_manager'
+
   # Command and Query bus DI setup
   BetaReaders\Shared\Infrastructure\Bus\Command\TacticianSyncCommandBus:
     arguments:

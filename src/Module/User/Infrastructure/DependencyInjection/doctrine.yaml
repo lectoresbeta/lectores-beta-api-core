@@ -5,6 +5,6 @@ doctrine:
         mappings:
           User:
             type: xml
-            dir: '%kernel.project_dir%/src/Module/User/Infrastructure/Persistence/Doctrine'
+            dir: '%kernel.project_dir%/src/Module/User/Infrastructure/Persistence/Doctrine/Mapping'
             prefix: BetaReaders\Module\User\Domain
             is_bundle: false
