@@ -1,5 +1,16 @@
 # Shared infrastructure components DI register
 services:
+  # Command and Query bus DI setup
+  BetaReaders\Shared\Infrastructure\Bus\Command\TacticianSyncCommandBus:
+    arguments:
+      $bus: '@tactician.commandbus.command'
+
+  BetaReaders\Shared\Infrastructure\Bus\Query\TacticianSyncQueryBus:
+    arguments:
+      $bus: '@tactician.commandbus.query'
+
+  BetaReaders\Shared\Domain\Bus\Command\CommandBus: '@BetaReaders\Shared\Infrastructure\Bus\Command\TacticianSyncCommandBus'
+  BetaReaders\Shared\Domain\Bus\Query\QueryBus: '@BetaReaders\Shared\Infrastructure\Bus\Query\TacticianSyncQueryBus'
 
   # AddJsonBodyToRequestListener
   BetaReaders\Packages\Symfony\Listener\AddJsonBodyToRequestListener:

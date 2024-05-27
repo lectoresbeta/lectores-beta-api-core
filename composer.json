@@ -15,6 +15,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.2",
         "lambdish/phunctional": "^2.1",
+        "league/tactician-bundle": "^1.5",
         "ramsey/uuid": "^4.7",
         "robinvdvleuten/ulid": "^5.0",
         "symfony/console": "6.4.*",
@@ -45,7 +46,7 @@
             "BetaReaders\\": ["src"]
         },
         "files": [
-            "src/Packages/Utils/*.php"
+            "src/Packages/Utils/utils.php"
         ]
     },
     "autoload-dev": {
