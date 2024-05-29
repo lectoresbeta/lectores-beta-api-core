@@ -31,6 +31,7 @@ services:
       context: .
       dockerfile: .docker/mysql/Dockerfile
       args:
+        MYSQL_VERSION: 8
         BASE_DIRECTORY: .docker
     ports:
       - "3306:3306"

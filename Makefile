@@ -18,6 +18,7 @@ RED := '\033[0;31m'
 help: ## Show make targets
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_\-\/]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf " \033[36m%-24s\033[0m  %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
+.SILENT:
 setup: ## Copy app bootstrap necessary files and install deps
 	if [ ! -f "docker-compose.yaml" ]; then cp docker-compose.dist.yaml docker-compose.yaml; fi
 	if [ ! -f "phpunit.xml" ]; then cp phpunit.xml.dist phpunit.xml; fi
@@ -25,9 +26,11 @@ setup: ## Copy app bootstrap necessary files and install deps
 	if [ ! -f ".env.local" ]; then cp .env .env.local; fi
 	if [ ! -d "vendor" ]; then make install; fi
 
+.SILENT:
 package-name: ## Capture package to install through composer
 	if [ ! -v PACKAGE ]; then printf ${RED}"PACKAGE not specified... PACKAGE=<package-name> make package/add"${NC}"\nº"; exit 1; fi
 
+.SILENT:
 show-containers: ## List all our active containers
 	$(DOCKER_COMPOSE) ps
 
