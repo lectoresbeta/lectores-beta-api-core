@@ -15,6 +15,11 @@ final class UserRoles extends Collection
         return UserRole::class;
     }
 
+    public static function registrationRoles(): self
+    {
+        return new self([UserRole::USER]);
+    }
+
     public static function fromPlain(array $roles): self
     {
         return new self(

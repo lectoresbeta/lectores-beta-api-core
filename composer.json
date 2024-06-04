@@ -16,17 +16,22 @@
         "doctrine/orm": "^3.2",
         "lambdish/phunctional": "^2.1",
         "league/tactician-bundle": "^1.5",
+        "opis/json-schema": "^2.3",
         "ramsey/uuid": "^4.7",
         "robinvdvleuten/ulid": "^5.0",
         "symfony/console": "6.4.*",
         "symfony/dotenv": "6.4.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.4.*",
+        "symfony/password-hasher": "6.4.*",
         "symfony/runtime": "6.4.*",
+        "symfony/security-bundle": "6.4.*",
         "symfony/yaml": "6.4.*"
     },
     "require-dev": {
+        "fakerphp/faker": "^1.23",
         "friendsofphp/php-cs-fixer": "^3.57",
+        "mockery/mockery": "^1.6",
         "phpro/grumphp": "^2.5",
         "phpstan/phpstan-symfony": "^1.4",
         "phpunit/phpunit": "10.5.20",
@@ -52,7 +57,10 @@
     "autoload-dev": {
         "psr-4": {
             "BetaReaders\\Tests\\": ["tests"]
-        }
+        },
+        "files": [
+            "tests/functions.php"
+        ]
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
