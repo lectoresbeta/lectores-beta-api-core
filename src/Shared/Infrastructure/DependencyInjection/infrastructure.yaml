@@ -1,5 +1,11 @@
 # Shared infrastructure components DI register
 services:
+  # Register symfony finder as service to avoid shared references injected given its own nature.
+  # https://symfony.com/doc/current/components/finder.html#usage
+  Symfony\Component\Finder\Finder:
+    class: 'Symfony\Component\Finder\Finder'
+    shared: false
+
   # Parent doctrine repository DI setup
   BetaReaders\Shared\Infrastructure\Doctrine\Repository:
     abstract: true
