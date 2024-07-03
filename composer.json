@@ -56,7 +56,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "BetaReaders\\Tests\\": ["tests"]
+            "BetaReaders\\Tests\\": ["tests","tests/unit", "tests/integration"]
         },
         "files": [
             "tests/functions.php"

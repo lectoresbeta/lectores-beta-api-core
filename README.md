@@ -32,6 +32,11 @@ make style/code-style  Analyse code style
 make style/fix         Fix code style
 ```
 
+# Request Flow :arrows_counterclockwise:
+
+![Common application request flow layer by layer](.etc/flow.png)
+
+# Links :link:
+
 ## :link: [Project structure :file_folder:](.etc/how-to/PROJECT_STRUCTURE.md)
 ## :link: [Working agreements :handshake:](.etc/how-to/WORKING_AGREEMENTS.md)
-## :link: [Coding style :nail_care:](.etc/how-to/coding-style/CODING_STYLE.md)
