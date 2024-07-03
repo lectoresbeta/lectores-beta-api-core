@@ -1,1 +1,7 @@
 services:
+
+  BetaReaders\Module\User\Application\Register\RegisterUserCommandHandler:
+    arguments:
+      $registerer: '@BetaReaders\Module\User\Domain\UserRegisterer'
+    tags:
+      - { name: tactician.handler, typehints: true }

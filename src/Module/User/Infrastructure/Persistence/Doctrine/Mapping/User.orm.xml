@@ -11,6 +11,11 @@
         <field name="username" column="username" length="255"/>
         <field name="password" column="password" length="255"/>
         <field name="roles" type="json" column="roles"/>
+
+        <unique-constraints>
+            <unique-constraint name="user_email_uniq_idx" columns="email"/>
+            <unique-constraint name="user_username_uniq_idx" columns="username"/>
+        </unique-constraints>
     </entity>
 
 </doctrine-mapping>

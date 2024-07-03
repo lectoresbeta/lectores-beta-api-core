@@ -1,4 +1,5 @@
-# v1.user.get:
-#   path: /v1/users/{userId}
-#   methods: [GET]
-#   defaults: { _controller: BetaReaders\Module\User\Infrastructure\UI\GetUserByIdController }
+# v1 User routes
+v1.user.post.register_user:
+  path: /v1/users
+  methods: [POST]
+  defaults: { _controller: BetaReaders\Module\User\Infrastructure\UI\Controller\RegisterUserController }

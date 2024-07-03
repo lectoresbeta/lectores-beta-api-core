@@ -3,3 +3,7 @@ imports:
   - { resource: application.yaml }
   - { resource: domain.yaml }
   - { resource: doctrine.yaml }
+
+parameters:
+  user_module_root_path: '%kernel.project_dir%/src/Module/User'
+  user_module_json_schemas_base_path: '%user_module_root_path%/Infrastructure/Validation/Schemas'
