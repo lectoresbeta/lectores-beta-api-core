@@ -8,8 +8,8 @@ services:
     build:
       context: .docker/webserver
       args:
-        PHP_VERSION: 8.1
-        HOST_UID: ${CURRENT_UID:-1000}
+        PHP_VERSION: ${PHP_VERSION}
+        HOST_UID: ${CURRENT_UID}
     extra_hosts:
       - host.docker.internal:host-gateway
     ports:
@@ -18,7 +18,9 @@ services:
       - mysql
     environment:
       - PHP_IDE_CONFIG=serverName=localhost
-      - PHP_VERSION=8.1
+      - PHP_VERSION=${PHP_VERSION}
+      - HOST_UID=${CURRENT_UID}
+      - HOST_GROUP=${CURRENT_GROUP}
     volumes:
       - ./:/var/www/html
       - ./.docker/config/php/php.ini:/usr/local/etc/php/php.ini
@@ -31,8 +33,8 @@ services:
       context: .
       dockerfile: .docker/mysql/Dockerfile
       args:
-        MYSQL_VERSION: 8
-        BASE_DIRECTORY: .docker
+        MYSQL_VERSION: ${MYSQL_VERSION}
+        BASE_DIRECTORY: ${BASE_DIRECTORY}
     ports:
       - "3306:3306"
     volumes:

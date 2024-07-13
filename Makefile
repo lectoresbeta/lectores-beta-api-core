@@ -1,12 +1,7 @@
 SHELL = /bin/bash
 DOCKER_CONTAINER = beta-readers-api-webserver
-DOCKER_COMPOSER = docker run --rm --interactive --tty --volume $$PWD:/app --user $$(id -u):$$(id -g) composer
-DOCKER_COMPOSE = docker compose -f docker-compose.yaml
-
-CURRENT_UID := $(shell id -u)
-CURRENT_GROUP := $(shell id -g)
-export CURRENT_UID
-export CURRENT_GROUP
+DOCKER_COMPOSER  = docker run --rm --interactive --tty --volume $$PWD:/app --user $$(id -u):$$(id -g) composer
+DOCKER_COMPOSE   = CURRENT_UID=$$(id -u) CURRENT_GROUP=$$(id -g) docker compose -f docker-compose.yaml --env-file $$PWD/.docker/config/.env.build
 
 # Colors
 NC := '\033[0m'
@@ -27,13 +22,18 @@ setup: ## Copy app bootstrap necessary files and install deps
 	if [ ! -d "vendor" ]; then make install; fi
 
 .SILENT:
+reset: ## Reset generated files from distributable sources
+	rm -rf docker-compose.yaml phpunit.xml .php-cs-fixer.php .env.local
+	@make setup
+	@make install
+
+.SILENT:
 package-name: ## Capture package to install through composer
 	if [ ! -v PACKAGE ]; then printf ${RED}"PACKAGE not specified... PACKAGE=<package-name> make package/add"${NC}"\nº"; exit 1; fi
 
 .SILENT:
 show-containers: ## List all our active containers
 	$(DOCKER_COMPOSE) ps
-
 
 #
 # 🐘 Build and run
@@ -44,8 +44,8 @@ start: ## Start and run project
 	$(DOCKER_COMPOSE) up -d
 
 .PHONY: start/force
-start/force: ## Start and run project forcing container contextual rebuild
-	@make files
+start/force: ## Start and run project forcing container contextual rebuild and distributable files regeneration.
+	@make reset
 	$(DOCKER_COMPOSE) up -d --build --force-recreate
 
 .PHONY: stop
@@ -63,27 +63,31 @@ package/add: ## Install new package through composer
 
 .PHONY: bash
 bash: ## Enter to the php-fpm container
-	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) -it $(DOCKER_CONTAINER) bash
+	docker exec --user=$$(id -u):$$(id -g) -it $(DOCKER_CONTAINER) bash
 
 #
 # 🧪 Testing
 #
-.PHONY: unit
-unit: ## Run unitary tests suite
-	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/phpunit -c phpunit.xml --testdox
+.PHONY: test/unit
+test/unit: ## Run unitary tests suite
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpunit -c phpunit.xml --testdox --testsuite=unitary
+
+.PHONY: test/acceptance
+test/acceptance: ## Run acceptance tests suite
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpunit -c phpunit.xml --testdox --testsuite=acceptance
 
 #
 # 💅 Style
 #
 .PHONY: style/all
 style/all: ## Analyse code style and possible errors
-	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
-	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon
 
 .PHONY: style/code-style
 style/code-style: ## Analyse code style
-	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
 
 .PHONY: style/fix
 style/fix: ## Fix code style
-	docker exec --user=$(CURRENT_UID):$(CURRENT_GROUP) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php

@@ -11,11 +11,13 @@ use function BetaReaders\Utils\jsonSerialize;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class AcceptanceTests extends WebTestCase
 {
+    use Arrangeable;
+
     protected KernelBrowser $client;
 
     protected const HTTP_HEADERS = [
@@ -27,6 +29,12 @@ abstract class AcceptanceTests extends WebTestCase
     {
         parent::setUp();
         $this->client = self::createClient(server: self::HTTP_HEADERS);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->arrange();
     }
 
     protected function httpGet(string $url, array $parameters = []): ?array
@@ -70,7 +78,8 @@ abstract class AcceptanceTests extends WebTestCase
 
     protected static function createKernel(array $options = []): Kernel
     {
-        return new Kernel('test', true);
+        $env = $options['environment'] ?? 'test';
+        return new Kernel($env, true);
     }
 
     protected function route(string $root, ?string $path = null): string
@@ -86,7 +95,7 @@ abstract class AcceptanceTests extends WebTestCase
         return $root.($path ?? null);
     }
 
-    protected function container(): ContainerInterface
+    protected function container(): Container
     {
         return $this->getContainer();
     }

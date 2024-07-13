@@ -1,0 +1,21 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  _instanceof:
+    BetaReaders\Packages\PHPUnit\Arranger\Arranger:
+      tags: [ 'beta_readers.test.arranger' ]
+
+  BetaReaders\Packages\PHPUnit\Arranger\DoctrineDatabaseArranger:
+    public: true
+    shared: false
+    arguments:
+      $entityManager: '@doctrine.orm.entity_manager'
+      $ignoreTables: [ 'doctrine_migration_versions' ]
+
+  BetaReaders\Packages\PHPUnit\Arranger\Arrangers:
+    public: true
+    shared: false
+    arguments:
+      $arrangers: !tagged_iterator beta_readers.test.arranger
