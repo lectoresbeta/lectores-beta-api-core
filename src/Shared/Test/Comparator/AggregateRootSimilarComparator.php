@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace BetaReaders\Shared\Test\Comparator;
 
 use BetaReaders\Shared\Domain\Aggregate\AggregateRoot;
+
+use function BetaReaders\Tests\isSimilar;
+
 use SebastianBergmann\Comparator\Comparator;
 use SebastianBergmann\Comparator\ComparisonFailure;
 use SebastianBergmann\Exporter\Exporter;
-use function BetaReaders\Tests\isSimilar;
 
 final class AggregateRootSimilarComparator extends Comparator
 {

@@ -19,12 +19,25 @@ if (!function_exists('camelToSnake')) {
 }
 
 if (!function_exists('jsonDeserialize')) {
-    function jsonDeserialize(string $string, int $depth = 512): array
+    function jsonDeserialize(string $json, int $depth = 512): array
     {
-        $array = json_decode($string, true, $depth);
+        $array = json_decode($json, true, $depth);
 
         if (JSON_ERROR_NONE == json_last_error()) {
             return $array;
+        }
+
+        throw new \RuntimeException(json_last_error_msg());
+    }
+}
+
+if (!function_exists('jsonSerialize')) {
+    function jsonSerialize(array $data): string
+    {
+        $json = json_encode($data);
+
+        if (JSON_ERROR_NONE == json_last_error()) {
+            return $json;
         }
 
         throw new \RuntimeException(json_last_error_msg());

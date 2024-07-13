@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BetaReaders\Tests;
 
-use BetaReaders\Shared\Test\SimilarMatcher;
 use BetaReaders\Shared\Test\SimilarConstraint;
+use BetaReaders\Shared\Test\SimilarMatcher;
 
 function isSimilar($expected, $value, $delta = 0.0, $maxDepth = 10, $canonicalize = false, $ignoreCase = false): bool
 {

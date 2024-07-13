@@ -11,7 +11,9 @@ use BetaReaders\Module\User\Domain\UserAlreadyExist;
 use BetaReaders\Module\User\Domain\UserPasswordHasher;
 use BetaReaders\Module\User\Domain\UserRepository;
 use BetaReaders\Tests\Module\ModuleTestCase;
+
 use function BetaReaders\Tests\similarTo;
+
 use Mockery\MockInterface;
 
 abstract class UserModuleTestCase extends ModuleTestCase

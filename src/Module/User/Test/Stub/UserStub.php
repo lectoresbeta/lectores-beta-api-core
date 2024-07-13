@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BetaReaders\Module\User\Test\Stub;
 
 use BetaReaders\Module\User\Domain\User;
-use BetaReaders\Shared\Domain\User\UserId;
 use BetaReaders\Shared\Domain\User\UserRoles;
 use BetaReaders\Shared\Test\Stub\User\UserIdStub;
 
