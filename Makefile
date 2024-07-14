@@ -91,3 +91,15 @@ style/code-style: ## Analyse code style
 .PHONY: style/fix
 style/fix: ## Fix code style
 	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php
+
+#
+# 🛢 Database
+#
+
+.PHONY: migrations
+migrations: ## Execute database migrations
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) php bin/console doctrine:migrations:migrate --no-interaction
+
+.PHONY: migrations-prev
+migrations-prev: ## Rollback the last migration
+	docker exec --user=$

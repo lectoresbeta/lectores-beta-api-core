@@ -40,3 +40,4 @@ make style/fix         Fix code style
 
 ## :link: [Project structure :file_folder:](.etc/how-to/PROJECT_STRUCTURE.md)
 ## :link: [Working agreements :handshake:](.etc/how-to/WORKING_AGREEMENTS.md)
+## :link: [Configure on windows :windows_conf:](.etc/how-to/CONFIGURE_ON_WINDOWS.md)
