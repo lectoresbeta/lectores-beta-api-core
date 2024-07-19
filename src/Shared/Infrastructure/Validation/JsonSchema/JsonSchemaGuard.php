@@ -24,10 +24,10 @@ final class JsonSchemaGuard
         $realSchemaPath = $this->fetchSchemaRealPath($schemaPath);
 
         $schemaId = sprintf('file://%s', $realSchemaPath);
-        $contentAsObject = json_decode(json_encode($content));
+        $contentAsObject = json_decode(json_encode($content) ?: '');
 
         $validator = new Validator();
-        $validator->resolver()->registerFile($schemaId, $realSchemaPath);
+        $validator->resolver()?->registerFile($schemaId, $realSchemaPath);
         $validation = $validator->validate($contentAsObject, $schemaId);
 
         if (!$validation->isValid()) {
@@ -37,14 +37,12 @@ final class JsonSchemaGuard
 
     private function fetchSchemaRealPath(string $schemaFilePath): string
     {
-        if (is_file($schemaFilePath)) {
-            return realpath($schemaFilePath);
+        $schemaExists = is_file($schemaFilePath) || $this->filesystem->exists($schemaFilePath);
+
+        if ($schemaExists && ($schemaPath = realpath($schemaFilePath)) !== false) {
+            return $schemaPath;
         }
 
-        if (!$this->filesystem->exists($schemaFilePath)) {
-            throw MissingValidationSchemaFile::withFilepath($schemaFilePath);
-        }
-
-        return realpath($schemaFilePath);
+        throw MissingValidationSchemaFile::withFilepath($schemaFilePath);
     }
 }

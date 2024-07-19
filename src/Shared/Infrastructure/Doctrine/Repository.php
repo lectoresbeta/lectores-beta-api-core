@@ -22,6 +22,9 @@ abstract class Repository
     ) {
     }
 
+    /**
+     * @return class-string<object>
+     */
     abstract public function entityClass(): string;
 
     abstract public function queryBuilder(): QueryBuilder;

@@ -14,14 +14,14 @@ if (!function_exists('camelToSnake')) {
     {
         return ctype_lower($word)
             ? $word
-            : strtolower(preg_replace('/([^A-Z\s])([A-Z])/', '$1_$2', $word));
+            : strtolower(preg_replace('/([^A-Z\s])([A-Z])/', '$1_$2', $word) ?? '');
     }
 }
 
 if (!function_exists('jsonDeserialize')) {
-    function jsonDeserialize(string $json, int $depth = 512): array
+    function jsonDeserialize(string $json): array
     {
-        $array = json_decode($json, true, $depth);
+        $array = json_decode($json, true);
 
         if (JSON_ERROR_NONE == json_last_error()) {
             return $array;
@@ -36,7 +36,7 @@ if (!function_exists('jsonSerialize')) {
     {
         $json = json_encode($data);
 
-        if (JSON_ERROR_NONE == json_last_error()) {
+        if (JSON_ERROR_NONE == json_last_error() && is_string($json)) {
             return $json;
         }
 

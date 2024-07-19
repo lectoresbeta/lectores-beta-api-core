@@ -1,5 +1,11 @@
+includes:
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+
 parameters:
     ignoreErrors:
+        # https://github.com/phpstan/phpstan-mockery/issues/8
+        - '#Call to an undefined method [a-zA-Z].*::shouldReceive\(\)#'
         - identifier: missingType.iterableValue
         - identifier: missingType.generics
     tmpDir: .phpstan

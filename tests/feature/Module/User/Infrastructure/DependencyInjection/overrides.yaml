@@ -1,0 +1,4 @@
+services:
+  BetaReaders\Module\User\Infrastructure\Password\FixedPasswordHasher: ~
+
+  BetaReaders\Module\User\Domain\UserPasswordHasher: '@BetaReaders\Module\User\Infrastructure\Password\FixedPasswordHasher'

@@ -16,7 +16,7 @@ final class UserRegisterer
     }
 
     /**
-     * @throws UserAlreadyExist
+     * @throws UserAlreadyExist|UnexpectedUserStoringError
      */
     public function register(string $id, string $username, string $email, string $password): void
     {

@@ -33,7 +33,7 @@ final class RegisterUserCommandHandlerTest extends UserModuleTestCase
 
         $this->shouldGenerateHashedPassword($user, $user->password());
 
-        $userWithRegistrationRoles = UserStub::fromUserWithRegistrationRoles($user);
+        $userWithRegistrationRoles = UserStub::withRegistrationRoles($user);
         $this->shouldSaveAnUserWithoutErrors($userWithRegistrationRoles);
 
         $command = new RegisterUserCommand(
@@ -55,7 +55,7 @@ final class RegisterUserCommandHandlerTest extends UserModuleTestCase
 
         $this->shouldGenerateHashedPassword($user, $user->password());
 
-        $userWithRegistrationRoles = UserStub::fromUserWithRegistrationRoles($user);
+        $userWithRegistrationRoles = UserStub::withRegistrationRoles($user);
         $this->shouldFailOnSaveGivenTheUserAlreadyExists($userWithRegistrationRoles);
 
         $command = new RegisterUserCommand(
@@ -77,7 +77,7 @@ final class RegisterUserCommandHandlerTest extends UserModuleTestCase
 
         $this->shouldGenerateHashedPassword($user, $user->password());
 
-        $userWithRegistrationRoles = UserStub::fromUserWithRegistrationRoles($user);
+        $userWithRegistrationRoles = UserStub::withRegistrationRoles($user);
         $this->shouldFailOnSaveGivenAnUnexpectedStorageError($userWithRegistrationRoles);
 
         $command = new RegisterUserCommand(

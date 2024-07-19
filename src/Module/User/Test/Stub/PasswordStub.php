@@ -11,6 +11,6 @@ final class PasswordStub
 {
     public static function random(): Password
     {
-        return new Password(StubCreator::random()->password(minLength: 10));
+        return new Password(StubCreator::random()->password(minLength: 20));
     }
 }

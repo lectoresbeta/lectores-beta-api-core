@@ -5,7 +5,7 @@ $finder = (new PhpCsFixer\Finder())
         __DIR__.'/src',
         __DIR__.'/tests',
     ])
-    ->exclude( [
+    ->exclude([
         __DIR__.'/.env',
         __DIR__.'/var',
         __DIR__.'/.docker',

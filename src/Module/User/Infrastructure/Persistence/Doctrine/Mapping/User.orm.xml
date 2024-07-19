@@ -10,7 +10,7 @@
         <field name="email" column="email" length="255"/>
         <field name="username" column="username" length="255"/>
         <field name="password" column="password" length="255"/>
-        <field name="roles" type="json" column="roles"/>
+        <field name="roles" type="user_roles_custom_type" column="roles"/>
 
         <unique-constraints>
             <unique-constraint name="user_email_uniq_idx" columns="email"/>

@@ -10,6 +10,11 @@ use function Lambdish\Phunctional\map;
 
 final class UserRoles extends Collection
 {
+    public function toArray(): array
+    {
+        return $this->map(fn (UserRole $role) => $role->value);
+    }
+
     public static function type(): string
     {
         return UserRole::class;
