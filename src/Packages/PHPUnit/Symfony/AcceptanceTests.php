@@ -17,8 +17,10 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class AcceptanceTests extends WebTestCase
 {
     use Arrangeable;
+    use HasDoctrine;
+    use HasHttpAssertions;
 
-    protected KernelBrowser $client;
+    protected ?KernelBrowser $client = null;
 
     protected const HTTP_HEADERS = [
         'CONTENT_TYPE' => 'application/json',
@@ -33,52 +35,62 @@ abstract class AcceptanceTests extends WebTestCase
 
     protected function tearDown(): void
     {
-        parent::tearDown();
-        $this->arrange();
+        try {
+            $this->arrange();
+            parent::tearDown();
+            $this->ensureKernelShutdown();
+        } catch (\Throwable) {
+            parent::tearDown();
+            $this->ensureKernelShutdown();
+        }
     }
 
     protected function httpGet(string $url, array $parameters = []): ?array
     {
-        $this->client->request(
+        $this->httpClient()->request(
             Request::METHOD_GET,
             $url,
             $parameters
         );
 
-        $response = $this->client->getResponse();
+        $content = $this->httpClient()->getResponse()->getContent();
+        $response = false === $content ? '' : $content;
 
-        return jsonDeserialize($response->getContent());
+        return jsonDeserialize($response);
     }
 
     protected function httpPost(string $url, array $content = []): ?array
     {
-        $this->client->request(
+        $this->httpClient()->request(
             Request::METHOD_POST,
             $url,
             content: jsonSerialize($content)
         );
 
-        $response = $this->client->getResponse();
+        $content = $this->httpClient()->getResponse()->getContent();
+        $response = false === $content ? '' : $content;
 
-        return jsonDeserialize($response->getContent());
+        return jsonDeserialize($response);
     }
 
     protected function httpPut(string $url, array $content = []): ?array
     {
-        $this->client->request(
+        $this->httpClient()->request(
             Request::METHOD_PUT,
             $url,
             content: jsonSerialize($content)
         );
 
-        $response = $this->client->getResponse();
+        $content = $this->httpClient()->getResponse()->getContent();
+        $response = false === $content ? '' : $content;
 
-        return jsonDeserialize($response->getContent());
+        return jsonDeserialize($response);
     }
 
     protected static function createKernel(array $options = []): Kernel
     {
         $env = $options['environment'] ?? 'test';
+
         return new Kernel($env, true);
     }
 
@@ -98,5 +110,14 @@ abstract class AcceptanceTests extends WebTestCase
     protected function container(): Container
     {
         return $this->getContainer();
+    }
+
+    private function httpClient(): KernelBrowser
+    {
+        if (null === $this->client) {
+            throw new \RuntimeException('You must set up the application before, client is closed by default.');
+        }
+
+        return $this->client;
     }
 }

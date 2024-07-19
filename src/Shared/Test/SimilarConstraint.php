@@ -15,7 +15,6 @@ final class SimilarConstraint extends Constraint
     public function __construct(
         private readonly mixed $value,
         private readonly float $delta = 0.0,
-        private readonly int $maxDepth = 10,
         private readonly bool $canonicalize = false,
         private readonly bool $ignoreCase = false
     ) {

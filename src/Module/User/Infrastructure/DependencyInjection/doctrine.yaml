@@ -8,3 +8,7 @@ doctrine:
             dir: '%kernel.project_dir%/src/Module/User/Infrastructure/Persistence/Doctrine/Mapping'
             prefix: BetaReaders\Module\User\Domain
             is_bundle: false
+
+  dbal:
+    types:
+      user_roles_custom_type: 'BetaReaders\Module\User\Infrastructure\Persistence\Doctrine\DBAL\UserRolesCustomType'

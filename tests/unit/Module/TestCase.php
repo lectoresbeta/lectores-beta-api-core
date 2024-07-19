@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace BetaReaders\Tests\Module;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Mockery\LegacyMockInterface;
+use Mockery\Mock;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -17,9 +19,9 @@ abstract class TestCase extends BaseTestCase
      *
      * @param class-string<T> $className
      *
-     * @return T
+     * @return T|MockInterface
      */
-    protected function mock(string $className): object
+    protected function mock(string $className)
     {
         /** @var T|MockInterface $mock */
         $mock = \Mockery::mock($className);

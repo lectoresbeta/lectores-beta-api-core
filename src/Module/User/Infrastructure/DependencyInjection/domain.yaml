@@ -1,5 +1,7 @@
 services:
+  BetaReaders\Module\User\Domain\UserPasswordHasher: '@BetaReaders\Module\User\Infrastructure\Password\SymfonyPasswordHasher'
+
   BetaReaders\Module\User\Domain\UserRegisterer:
     arguments:
-      $passwordHasher: '@BetaReaders\Module\User\Infrastructure\Password\SymfonyPasswordHasher'
+      $passwordHasher: '@BetaReaders\Module\User\Domain\UserPasswordHasher'
       $repository: '@BetaReaders\Module\User\Infrastructure\Persistence\Doctrine\DoctrineUserRepository'

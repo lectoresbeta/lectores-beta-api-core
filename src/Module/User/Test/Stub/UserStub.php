@@ -21,11 +21,33 @@ final class UserStub
         );
     }
 
-    public static function fromUserWithRegistrationRoles(User $user): User
+    public static function withRegistrationRoles(User $user): User
     {
         return new User(
             $user->id(),
             $user->email(),
+            $user->username(),
+            UserRoles::registrationRoles(),
+            $user->password(),
+        );
+    }
+
+    public static function withSameEmailAndDistinctIdAndUsername(User $user): User
+    {
+        return new User(
+            UserIdStub::random(),
+            $user->email(),
+            UsernameStub::random(),
+            UserRoles::registrationRoles(),
+            $user->password(),
+        );
+    }
+
+    public static function withSameUsernameAndDistinctIdAndEmail(User $user): User
+    {
+        return new User(
+            UserIdStub::random(),
+            EmailStub::random(),
             $user->username(),
             UserRoles::registrationRoles(),
             $user->password(),

@@ -13,7 +13,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     ports:
-      - "9000:80"
+      - "8000:80"
     links:
       - mysql
     environment:
@@ -44,6 +44,8 @@ services:
     tmpfs:
       - /var/lib/mysql:rw,noexec,size=256M
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "--silent" ]
+      test: [ "CMD", "mysqladmin", "-umaster_user", "-pcan_all", "ping", "--silent" ]
       interval: 5s
-      retries: 3
+      timeout: 3s
+      retries: 5
+      start_period: 0s

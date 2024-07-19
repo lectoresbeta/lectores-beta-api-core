@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace BetaReaders\Module\User\Infrastructure\UI\Controller;
 
 use BetaReaders\Module\User\Application\Register\RegisterUserCommand;
+use BetaReaders\Module\User\Domain\UnexpectedUserStoringError;
+use BetaReaders\Module\User\Domain\UserAlreadyExist;
 use BetaReaders\Shared\Domain\Bus\Command\CommandBus;
 use BetaReaders\Shared\Infrastructure\Validation\JsonSchema\JsonSchemaGuard;
 
@@ -26,25 +28,31 @@ final class RegisterUserController
 
     public function __invoke(Request $request): JsonResponse
     {
-        $body = $request->request->all();
-        $this->bodyGuard->guard($body, self::JSON_SCHEMA_ID);
+        try {
+            $body = $request->request->all();
+            $this->bodyGuard->guard($body, self::JSON_SCHEMA_ID);
 
-        [$userId, $email, $username, $password] = [
-            get_in(['data', 'id'], $body),
-            get_in(['data', 'attributes', 'email'], $body),
-            get_in(['data', 'attributes', 'username'], $body),
-            get_in(['data', 'attributes', 'password'], $body),
-        ];
+            [$userId, $email, $username, $password] = [
+                get_in(['data', 'id'], $body),
+                get_in(['data', 'attributes', 'email'], $body),
+                get_in(['data', 'attributes', 'username'], $body),
+                get_in(['data', 'attributes', 'password'], $body),
+            ];
 
-        $command = new RegisterUserCommand(
-            $userId,
-            $email,
-            $username,
-            $password
-        );
+            $command = new RegisterUserCommand(
+                $userId,
+                $email,
+                $username,
+                $password
+            );
 
-        $this->bus->dispatch($command);
+            $this->bus->dispatch($command);
 
-        return new JsonResponse(null, Response::HTTP_CREATED);
+            return new JsonResponse(null, Response::HTTP_CREATED);
+        } catch (UserAlreadyExist) {
+            return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
+        } catch (UnexpectedUserStoringError) {
+            return new JsonResponse(null, Response::HTTP_CONFLICT);
+        }
     }
 }

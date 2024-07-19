@@ -21,7 +21,7 @@ abstract class Collection implements \Countable, \IteratorAggregate
         Assert::arrayOf(static::type(), $this->items);
     }
 
-    public static function empty(): self
+    public static function empty(): static
     {
         $class = static::class;
 

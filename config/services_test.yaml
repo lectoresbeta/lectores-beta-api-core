@@ -1,3 +1,6 @@
+imports:
+  - { resource: "../tests/feature/Module/User/Infrastructure/DependencyInjection/overrides.yaml" }
+
 services:
   _defaults:
     autowire: true

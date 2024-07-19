@@ -22,6 +22,11 @@ setup: ## Copy app bootstrap necessary files and install deps
 	if [ ! -d "vendor" ]; then make install; fi
 
 .SILENT:
+check-databases-are-healthy:
+	# MySQL
+	while [ $$(docker inspect --format "{{json .State.Health.Status }}" $$($(DOCKER_COMPOSE) ps -q mysql)) != "\"healthy\"" ]; do printf "."; sleep 1; done
+
+.SILENT:
 reset: ## Reset generated files from distributable sources
 	rm -rf docker-compose.yaml phpunit.xml .php-cs-fixer.php .env.local
 	@make setup
@@ -42,11 +47,15 @@ show-containers: ## List all our active containers
 start: ## Start and run project
 	@make setup
 	$(DOCKER_COMPOSE) up -d
+	@make check-databases-are-healthy
+	@make migrations
 
 .PHONY: start/force
 start/force: ## Start and run project forcing container contextual rebuild and distributable files regeneration.
 	@make reset
 	$(DOCKER_COMPOSE) up -d --build --force-recreate
+	@make check-databases-are-healthy
+	@make migrations
 
 .PHONY: stop
 stop: ## Stop project
@@ -84,6 +93,11 @@ style/all: ## Analyse code style and possible errors
 	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
 	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon
 
+.PHONY: style/analyse
+style/analyse: ## Analyse code errors statically
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan clear-result-cache -c phpstan.neon --quiet
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon
+
 .PHONY: style/code-style
 style/code-style: ## Analyse code style
 	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
@@ -98,8 +112,8 @@ style/fix: ## Fix code style
 
 .PHONY: migrations
 migrations: ## Execute database migrations
-	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) php bin/console doctrine:migrations:migrate --no-interaction
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) php bin/console doctrine:migrations:migrate --no-interaction --quiet --allow-no-migration
 
 .PHONY: migrations-prev
 migrations-prev: ## Rollback the last migration
-	docker exec --user=$
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) php bin/console doctrine:migrations:migrate prev --no-interaction --quiet --allow-no-migration
