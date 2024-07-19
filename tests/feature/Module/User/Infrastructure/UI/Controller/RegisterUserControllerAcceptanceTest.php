@@ -47,6 +47,7 @@ final class RegisterUserControllerAcceptanceTest extends UserAcceptanceTestCase
 
     /**
      * @test
+     *
      * @dataProvider constrainedUsersProvider
      */
     public function itShouldNotRegisterAnUserIfTheEmailIsAlreadyTaken(User $randomUser, User $userToCreate): void

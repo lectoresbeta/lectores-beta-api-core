@@ -18,6 +18,7 @@ setup: ## Copy app bootstrap necessary files and install deps
 	if [ ! -f "docker-compose.yaml" ]; then cp docker-compose.dist.yaml docker-compose.yaml; fi
 	if [ ! -f "phpunit.xml" ]; then cp phpunit.xml.dist phpunit.xml; fi
 	if [ ! -f ".php-cs-fixer.php" ]; then cp .php-cs-fixer.dist.php .php-cs-fixer.php; fi
+	if [ ! -f "phpstan.neon" ]; then cp phpstan.dist.neon phpstan.neon; fi
 	if [ ! -f ".env.local" ]; then cp .env .env.local; fi
 	if [ ! -d "vendor" ]; then make install; fi
 
@@ -28,7 +29,7 @@ check-databases-are-healthy:
 
 .SILENT:
 reset: ## Reset generated files from distributable sources
-	rm -rf docker-compose.yaml phpunit.xml .php-cs-fixer.php .env.local
+	rm -rf docker-compose.yaml phpunit.xml phpstan.neon .php-cs-fixer.php .env.local
 	@make setup
 	@make install
 
@@ -90,21 +91,21 @@ test/acceptance: ## Run acceptance tests suite
 #
 .PHONY: style/all
 style/all: ## Analyse code style and possible errors
-	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
-	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php $$(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon $$(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
 
 .PHONY: style/analyse
 style/analyse: ## Analyse code errors statically
 	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan clear-result-cache -c phpstan.neon --quiet
-	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon $$(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
 
 .PHONY: style/code-style
 style/code-style: ## Analyse code style
-	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php $$(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
 
 .PHONY: style/fix
 style/fix: ## Fix code style
-	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php
+	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --config .php-cs-fixer.php $$(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
 
 #
 # 🛢 Database

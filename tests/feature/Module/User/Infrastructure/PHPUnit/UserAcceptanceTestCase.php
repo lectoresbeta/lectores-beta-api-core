@@ -49,12 +49,13 @@ abstract class UserAcceptanceTestCase extends AcceptanceTests
 
     protected function thenUserShouldMatchWithTheStoredOnes(User $user): void
     {
+        /** @var User|null $databaseUser */
         $databaseUser = $this->repositoryFor(User::class)->find($user->id());
 
-        Assert::assertEquals($databaseUser->id(), $user->id());
-        Assert::assertEquals($databaseUser->email(), $user->email());
-        Assert::assertEquals($databaseUser->roles(), $user->roles());
-        Assert::assertEquals($databaseUser->username(), $user->username());
-        Assert::assertEquals($databaseUser->password(), $user->password());
+        Assert::assertEquals($databaseUser?->id(), $user->id());
+        Assert::assertEquals($databaseUser?->email(), $user->email());
+        Assert::assertEquals($databaseUser?->roles(), $user->roles());
+        Assert::assertEquals($databaseUser?->username(), $user->username());
+        Assert::assertEquals($databaseUser?->password(), $user->password());
     }
 }

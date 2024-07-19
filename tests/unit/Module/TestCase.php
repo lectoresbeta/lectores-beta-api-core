@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace BetaReaders\Tests\Module;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use Mockery\LegacyMockInterface;
-use Mockery\Mock;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 

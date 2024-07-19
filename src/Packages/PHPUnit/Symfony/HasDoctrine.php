@@ -11,7 +11,6 @@ trait HasDoctrine
 {
     /**
      * @param class-string<object> $entityClass
-     * @return ObjectRepository
      */
     protected function repositoryFor(string $entityClass): ObjectRepository
     {

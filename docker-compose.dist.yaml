@@ -45,7 +45,7 @@ services:
       - /var/lib/mysql:rw,noexec,size=256M
     healthcheck:
       test: [ "CMD", "mysqladmin", "-umaster_user", "-pcan_all", "ping", "--silent" ]
-      interval: 5s
-      timeout: 3s
-      retries: 5
+      interval: 10s
+      timeout: 7s
+      retries: 10
       start_period: 0s

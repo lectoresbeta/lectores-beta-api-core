@@ -1,0 +1,71 @@
+name: beta-readers-quality
+on:
+  pull_request:
+    branches:
+      - main
+      - feature/**
+
+concurrency:
+  group: "beta-readers-quality"
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '8.1' ]
+        dependency-stability: [ prefer-stable ]
+
+    name: Beta Readers - ${{ matrix.php-versions }} - ${{ matrix.operating-system}} - Code quality
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install PHP versions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+      - name: Get Composer Cache Directory 2
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v4
+        id: actions-cache
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Cache PHP dependencies
+        uses: actions/cache@v4
+        id: vendor-cache
+        with:
+          path: vendor
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/composer.lock') }}
+
+      - name: Install Dependencies
+        run: |
+          composer --version --no-ansi
+          composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+          composer show --no-ansi
+          cp .php-cs-fixer.dist.php .php-cs-fixer.php
+          cp phpstan.dist.neon phpstan.neon
+
+      - name: List all handled files on branch except deleted ones
+        run: |
+          git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n ""
+
+      - name: Code style analysis
+        run: |
+          ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php $(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
+
+      - name: Static code analysis
+        run: |
+          ./vendor/bin/phpstan analyse -c phpstan.neon $(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
