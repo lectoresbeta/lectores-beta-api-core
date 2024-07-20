@@ -24,6 +24,12 @@ services:
   BetaReaders\Shared\Domain\Bus\Command\CommandBus: '@BetaReaders\Shared\Infrastructure\Bus\Command\TacticianSyncCommandBus'
   BetaReaders\Shared\Domain\Bus\Query\QueryBus: '@BetaReaders\Shared\Infrastructure\Bus\Query\TacticianSyncQueryBus'
 
+  # JSON API
+  BetaReaders\Shared\Infrastructure\Response\JsonApi\JsonApiErrorResponseEncoder: ~
+
+  # Response Factories
+  BetaReaders\Shared\Infrastructure\Response\JsonResponseFactory: ~
+
   # AddJsonBodyToRequestListener
   BetaReaders\Packages\Symfony\Listener\AddJsonBodyToRequestListener:
     tags:
@@ -31,6 +37,10 @@ services:
 
   # ExceptionListener
   BetaReaders\Packages\Symfony\Listener\ExceptionListener:
+    arguments:
+      $exceptionHandler: '@BetaReaders\Shared\Infrastructure\Entrypoint\Http\HttpExceptionsHandler'
+      $errorResponseEncoder: '@BetaReaders\Shared\Infrastructure\Response\JsonApi\JsonApiErrorResponseEncoder'
+      $responseFactory: '@BetaReaders\Shared\Infrastructure\Response\JsonResponseFactory'
     tags:
       - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
@@ -41,3 +51,7 @@ services:
   # UlidProvider
   BetaReaders\Shared\Infrastructure\Uid\RandomUlidProvider: ~
   BetaReaders\Shared\Domain\Uid\UlidProvider: '@BetaReaders\Shared\Infrastructure\Uid\RandomUlidProvider'
+
+  # HTTP Exception Handler
+  BetaReaders\Shared\Infrastructure\Entrypoint\Http\HttpExceptionsHandler:
+    shared: true
