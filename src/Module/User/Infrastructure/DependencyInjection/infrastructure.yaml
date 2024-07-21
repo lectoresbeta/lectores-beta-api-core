@@ -1,9 +1,13 @@
 services:
+  BetaReaders\Module\User\Infrastructure\Persistence\Doctrine\DoctrineUserRepository:
+    parent: BetaReaders\Shared\Infrastructure\Doctrine\Repository
+
   beta_readers.users.http.json_body_guard:
     class: BetaReaders\Shared\Infrastructure\Validation\JsonSchema\JsonSchemaGuard
     arguments:
-      $schemasRootPath: '%user_module_json_schemas_base_path%'
       $filesystem: '@filesystem'
+      $schemasRootPath: '%user_module_json_schemas_base_path%'
+      $formatter: '@BetaReaders\Shared\Infrastructure\Validation\JsonSchema\JsonSchemaErrorFormatter'
 
   beta_readers.users.http.json_api_controller:
     class: BetaReaders\Shared\Infrastructure\Entrypoint\Http\JsonApiController
@@ -12,6 +16,10 @@ services:
       $commandBus: '@BetaReaders\Shared\Infrastructure\Bus\Command\TacticianSyncCommandBus'
       $bodyGuard: '@beta_readers.users.http.json_body_guard'
       $exceptionHandler: '@BetaReaders\Shared\Infrastructure\Entrypoint\Http\HttpExceptionsHandler'
+
+  BetaReaders\Module\User\Infrastructure\Response\JsonApi\UserJsonApiSchemaRegisterer:
+    tags:
+      - { name: beta_readers.json_api_schema_registerer }
 
   BetaReaders\Packages\Symfony\Security\SymfonyPasswordAuthenticatedUserFactory: ~
 
@@ -26,6 +34,3 @@ services:
     autowire: true
     tags:
       - controller.service_arguments
-
-  BetaReaders\Module\User\Infrastructure\Persistence\Doctrine\DoctrineUserRepository:
-    parent: BetaReaders\Shared\Infrastructure\Doctrine\Repository

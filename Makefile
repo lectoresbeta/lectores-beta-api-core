@@ -92,11 +92,12 @@ test/acceptance: ## Run acceptance tests suite
 .PHONY: style/all
 style/all: ## Analyse code style and possible errors
 	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/php-cs-fixer fix --dry-run --diff --config .php-cs-fixer.php $$(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
+	docker exec --user=root:root $(DOCKER_CONTAINER) ./vendor/bin/phpstan clear-result-cache -c phpstan.neon --quiet
 	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon $$(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
 
 .PHONY: style/analyse
 style/analyse: ## Analyse code errors statically
-	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan clear-result-cache -c phpstan.neon --quiet
+	docker exec --user=root:root $(DOCKER_CONTAINER) ./vendor/bin/phpstan clear-result-cache -c phpstan.neon --quiet
 	docker exec --user=$$(id -u):$$(id -g) $(DOCKER_CONTAINER) ./vendor/bin/phpstan analyse -c phpstan.neon $$(git log --stat -1 --name-only --diff-filter=d | egrep '\.php$$' || echo -n "")
 
 .PHONY: style/code-style

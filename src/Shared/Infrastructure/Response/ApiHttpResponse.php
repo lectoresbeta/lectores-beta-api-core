@@ -6,8 +6,14 @@ namespace BetaReaders\Shared\Infrastructure\Response;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @template T
+ */
 abstract class ApiHttpResponse implements HttpResponse
 {
+    /**
+     * @param T|null $data
+     */
     public function __construct(
         protected mixed $data = null,
         protected int $statusCode = Response::HTTP_OK,
@@ -15,6 +21,9 @@ abstract class ApiHttpResponse implements HttpResponse
     ) {
     }
 
+    /**
+     * @return T|null
+     */
     public function data(): mixed
     {
         return $this->data;
