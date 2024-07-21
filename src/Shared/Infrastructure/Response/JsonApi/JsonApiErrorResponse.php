@@ -15,6 +15,6 @@ final class JsonApiErrorResponse extends JsonApiResponse
 
     public static function fromException(\Throwable $exception, int $code, array $headers = []): self
     {
-        return new self($code, new JsonApiBridgeErrorResponse($exception), $headers);
+        return new self($code, new JsonApiThrowableResponse($exception), $headers);
     }
 }

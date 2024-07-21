@@ -9,9 +9,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 final class JsonSchemaGuard
 {
+    private const MAX_ERRORS = 5;
+
     public function __construct(
         private readonly Filesystem $filesystem,
-        private readonly string $schemasRootPath
+        private readonly string $schemasRootPath,
+        private readonly JsonSchemaErrorFormatter $formatter,
+        private readonly int $maxErrors = self::MAX_ERRORS
     ) {
     }
 
@@ -27,11 +31,14 @@ final class JsonSchemaGuard
         $contentAsObject = json_decode(json_encode($content) ?: '');
 
         $validator = new Validator();
+        $validator->setMaxErrors($this->maxErrors);
+
         $validator->resolver()?->registerFile($schemaId, $realSchemaPath);
         $validation = $validator->validate($contentAsObject, $schemaId);
 
-        if (!$validation->isValid()) {
-            throw JsonSchemaValidationMismatch::withErrors([]);
+        if (!$validation->isValid() && ($validationError = $validation->error())) {
+            $errors = $this->formatter->format($validationError);
+            throw JsonSchemaValidationMismatch::withErrors($errors);
         }
     }
 

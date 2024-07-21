@@ -24,8 +24,20 @@ services:
   BetaReaders\Shared\Domain\Bus\Command\CommandBus: '@BetaReaders\Shared\Infrastructure\Bus\Command\TacticianSyncCommandBus'
   BetaReaders\Shared\Domain\Bus\Query\QueryBus: '@BetaReaders\Shared\Infrastructure\Bus\Query\TacticianSyncQueryBus'
 
+  # JSON Schema
+  BetaReaders\Shared\Infrastructure\Validation\JsonSchema\JsonSchemaErrorFormatter: ~
+
   # JSON API
+  BetaReaders\Shared\Infrastructure\Response\JsonApi\JsonApiSchemaMapping:
+    arguments:
+      $registrations: !tagged_iterator beta_readers.json_api_schema_registerer
+
   BetaReaders\Shared\Infrastructure\Response\JsonApi\JsonApiErrorResponseEncoder: ~
+
+  BetaReaders\Shared\Infrastructure\Response\JsonApi\JsonApiResponseEncoder:
+    arguments:
+      $requestStack: '@request_stack'
+      $mapping: '@BetaReaders\Shared\Infrastructure\Response\JsonApi\JsonApiSchemaMapping'
 
   # Response Factories
   BetaReaders\Shared\Infrastructure\Response\JsonResponseFactory: ~
@@ -35,7 +47,7 @@ services:
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
-  # ExceptionListener
+  # Symfony Event Listeners
   BetaReaders\Packages\Symfony\Listener\ExceptionListener:
     arguments:
       $exceptionHandler: '@BetaReaders\Shared\Infrastructure\Entrypoint\Http\HttpExceptionsHandler'
@@ -43,6 +55,13 @@ services:
       $responseFactory: '@BetaReaders\Shared\Infrastructure\Response\JsonResponseFactory'
     tags:
       - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+  BetaReaders\Shared\Infrastructure\Symfony\Listener\ResponseListener:
+    arguments:
+      $encoder: '@BetaReaders\Shared\Infrastructure\Response\JsonApi\JsonApiResponseEncoder'
+      $responseFactory: '@BetaReaders\Shared\Infrastructure\Response\JsonResponseFactory'
+    tags:
+      - { name: kernel.event_listener, event: kernel.view, method: onKernelView, priority: 200 }
 
   # UuidProvider
   BetaReaders\Shared\Infrastructure\Uid\RandomUuidProvider: ~

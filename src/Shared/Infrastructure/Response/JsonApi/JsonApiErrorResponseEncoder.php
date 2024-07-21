@@ -12,7 +12,7 @@ use Neomerx\JsonApi\Encoder\Encoder;
 final class JsonApiErrorResponseEncoder implements HttpResponseEncoder
 {
     /**
-     * @param HttpResponse<JsonApiBridgeErrorResponse> $response
+     * @param HttpResponse<JsonApiThrowableResponse> $response
      */
     public function encode(HttpResponse $response): string
     {

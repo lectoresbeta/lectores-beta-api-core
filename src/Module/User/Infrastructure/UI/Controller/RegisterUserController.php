@@ -8,10 +8,10 @@ use BetaReaders\Module\User\Application\Register\RegisterUserCommand;
 use BetaReaders\Module\User\Domain\UnexpectedUserStoringError;
 use BetaReaders\Module\User\Domain\UserAlreadyExist;
 use BetaReaders\Shared\Infrastructure\Entrypoint\Http\JsonApiController;
+use BetaReaders\Shared\Infrastructure\Response\JsonApi\JsonApiCreatedResponse;
 
 use function Lambdish\Phunctional\get_in;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,7 +27,7 @@ final class RegisterUserController extends JsonApiController
         ];
     }
 
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(Request $request): JsonApiCreatedResponse
     {
         $body = $request->request->all();
         $this->guardJsonSchema($body, self::JSON_SCHEMA_ID);
@@ -48,6 +48,6 @@ final class RegisterUserController extends JsonApiController
 
         $this->dispatch($command);
 
-        return new JsonResponse(null, Response::HTTP_CREATED);
+        return new JsonApiCreatedResponse();
     }
 }
