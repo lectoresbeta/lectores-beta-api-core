@@ -20,7 +20,7 @@ final class RegisterUserControllerAcceptanceTest extends UserAcceptanceTestCase
         $randomUserJson = $this->jsonApiFromUser($randomUser);
 
         // When
-        $this->httpPost($this->route('/v1/users'), $randomUserJson);
+        $this->httpPost($this->route('/api/v1/users'), $randomUserJson);
 
         // Then
         $this->thenTheResponseCodeShouldBe(201);
@@ -39,7 +39,7 @@ final class RegisterUserControllerAcceptanceTest extends UserAcceptanceTestCase
         $randomUserJson = $this->jsonApiFromUser($randomUser);
 
         // When
-        $this->httpPost($this->route('/v1/users'), $randomUserJson);
+        $this->httpPost($this->route('/api/v1/users'), $randomUserJson);
 
         // Then
         $this->thenTheResponseCodeShouldBe(409);
@@ -57,7 +57,7 @@ final class RegisterUserControllerAcceptanceTest extends UserAcceptanceTestCase
         $randomUserJson = $this->jsonApiFromUser($userToCreate);
 
         // When
-        $this->httpPost($this->route('/v1/users'), $randomUserJson);
+        $this->httpPost($this->route('/api/v1/users'), $randomUserJson);
 
         // Then
         $this->thenTheResponseCodeShouldBe(400);
