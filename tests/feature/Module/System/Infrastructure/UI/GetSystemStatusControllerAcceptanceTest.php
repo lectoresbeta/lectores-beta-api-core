@@ -18,4 +18,5 @@ final class GetSystemStatusControllerAcceptanceTest extends AcceptanceTests
         $this->thenTheResponseCodeShouldBe(200);
         $this->assertTrue(get_in(['data', 'attributes', 'result'], $response));
     }
+
 }

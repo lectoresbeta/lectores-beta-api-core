@@ -57,7 +57,7 @@ final class JsonApiResponseEncoder
     {
         return $response instanceof JsonApiPaginatedResponse
             ? $response->type()
-            :  get_class($response->data());
+            : get_class($response->data());
     }
 
     private function contentByResourceType(ApiHttpResponse $response): mixed
