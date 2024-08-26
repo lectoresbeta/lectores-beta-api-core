@@ -35,7 +35,9 @@ final class JsonApiResponseEncoder
         }
 
         $includes = $this->fetchIncludesFromRequest();
-        $encoder = Encoder::instance($this->mapping->all())->withIncludedPaths($includes);
+        $encoder = Encoder::instance($this->mapping->all())
+            ->withLinks([])
+            ->withIncludedPaths($includes);
 
         if ($jsonApiResponse instanceof JsonApiPaginatedResponse) {
             return $encoder->withMeta($jsonApiResponse->metadata());
@@ -55,7 +57,7 @@ final class JsonApiResponseEncoder
     {
         return $response instanceof JsonApiPaginatedResponse
             ? $response->type()
-            : get_class($response);
+            :  get_class($response->data());
     }
 
     private function contentByResourceType(ApiHttpResponse $response): mixed
