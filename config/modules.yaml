@@ -1,3 +1,4 @@
 imports:
   - { resource: "../src/Shared/Infrastructure/DependencyInjection/_module.yaml" }
   - { resource: "../src/Module/User/Infrastructure/DependencyInjection/_module.yaml" }
+  - { resource: "../src/Module/System/Infrastructure/DependencyInjection/_module.yaml" }
