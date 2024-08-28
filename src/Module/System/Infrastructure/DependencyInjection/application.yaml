@@ -1,0 +1,6 @@
+services:
+  BetaReaders\Module\System\Application\Get\GetSystemStatusQueryHandler:
+    arguments:
+      $ulidProvider: '@BetaReaders\Shared\Domain\Uid\UlidProvider'
+    tags:
+      - { name: tactician.handler, typehints: true }
