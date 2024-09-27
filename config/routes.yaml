@@ -1,3 +1,6 @@
 users_routing:
     prefix: /api
     resource: '../src/Module/User/Infrastructure/DependencyInjection/routes.yaml'
+
+system_routning:    
+    resource: '../src/Module/System/Infrastructure/DependencyInjection/routes.yaml'

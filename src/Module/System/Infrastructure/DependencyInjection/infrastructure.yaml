@@ -1,0 +1,27 @@
+services:
+ 
+  beta_readers.system.http.json_body_guard:
+    class: BetaReaders\Shared\Infrastructure\Validation\JsonSchema\JsonSchemaGuard
+    arguments:
+      $filesystem: '@filesystem'
+      $schemasRootPath: ''
+      $formatter: '@BetaReaders\Shared\Infrastructure\Validation\JsonSchema\JsonSchemaErrorFormatter'
+
+  beta_readers.system.http.json_api_controller:
+    class: BetaReaders\Shared\Infrastructure\Entrypoint\Http\JsonApiController
+    arguments:
+      $queryBus: '@BetaReaders\Shared\Infrastructure\Bus\Query\TacticianSyncQueryBus'
+      $commandBus: '@BetaReaders\Shared\Infrastructure\Bus\Command\TacticianSyncCommandBus'
+      $bodyGuard: '@beta_readers.system.http.json_body_guard'
+      $exceptionHandler: '@BetaReaders\Shared\Infrastructure\Entrypoint\Http\HttpExceptionsHandler'
+
+  BetaReaders\Module\System\Infrastructure\Response\JsonApi\SystemJsonApiSchemaRegisterer:
+    tags:
+      - { name: beta_readers.json_api_schema_registerer }    
+
+  BetaReaders\Module\System\Infrastructure\UI\Controller\GetSystemStatusController:
+    parent: beta_readers.system.http.json_api_controller
+    public: true
+    autowire: true
+    tags:
+      - controller.service_arguments
