@@ -1,0 +1,5 @@
+# system routes
+system.healthcheck:
+  path: /system/healthcheck
+  methods: [GET]
+  defaults: { _controller: BetaReaders\Module\System\Infrastructure\UI\Controller\GetSystemStatusController }

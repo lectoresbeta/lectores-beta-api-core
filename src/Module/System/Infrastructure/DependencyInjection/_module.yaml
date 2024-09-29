@@ -1,0 +1,5 @@
+imports:
+  - { resource: infrastructure.yaml }
+  - { resource: application.yaml }
+  #- { resource: domain.yaml }
+  #- { resource: doctrine.yaml }
